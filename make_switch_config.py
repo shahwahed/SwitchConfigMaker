@@ -12,16 +12,12 @@ from pprint import pprint
 #from gettext import gettext as _
 import gettext
 import locale
-#en = gettext.translation('make_switch_config', localedir='locale', languages=['en_GB'])
-#en.install()
 
 current_locale, encoding = locale.getdefaultlocale()
 print(current_locale)
 
 locale_path = 'locale/'
 language = gettext.translation('make_switch_config', locale_path, [current_locale], fallback=True )
-#language = gettext.translation()
-#language = gettext.translation ('make_switch_config', locale_path)
 language.install()
 
 #script variable
