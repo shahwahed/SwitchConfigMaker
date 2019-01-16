@@ -1,0 +1,17 @@
+!AAA Configuration
+aaa new-model
+!
+aaa authentication login default local
+aaa authentication login CONSOLE local
+!
+aaa authorization console
+aaa authorization config-commands
+aaa authorization exec default local 
+aaa authorization exec CONSOLE local 
+aaa authorization commands 1 default local 
+aaa authorization commands 1 CONSOLE local 
+aaa authorization commands 15 default local 
+aaa authorization commands 15 CONSOLE local 
+!
+aaa session-id common
+

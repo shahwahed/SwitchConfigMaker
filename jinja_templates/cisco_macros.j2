@@ -1,0 +1,95 @@
+{% macro access(port, description, vlan, vlandict, portdict) -%}
+interface {{ portdict.get(port) }}
+ description "{{ description }}"
+ switchport access vlan {{ vlandict.get(vlan) }}
+ switchport mode access
+ switchport nonegotiate
+ switchport protected
+ switchport block unicast
+ switchport block multicast
+ switchport port-security
+ switchport port-security maximum 1
+ switchport port-security violation shutdown
+ snmp ifindex persist
+ no cdp enable
+ no vtp
+ no lldp transmit
+ no lldp receive
+ spanning-tree portfast
+ spanning-tree bpdufilter enable
+ spanning-tree bpduguard enable
+ no shutdown
+{%- endmacro %}
+
+{% macro accesstiny(port, description, vlan, vlandict, portdict) -%}
+interface {{ portdict.get(port) }}
+ no vtp
+ no cdp enable
+ switchport mode access
+ switchport access vlan {{ vlandict.get(vlan) }}
+ switchport nonegotiate
+ switchport protected
+ spanning-tree portfast
+ switchport block unicast
+ switchport block multicast
+ 
+{%- endmacro %}
+
+{% macro trunk(port, description, vlans, vlandict, portdict) -%}
+interface {{ portdict.get(port) }}
+ description "{{ description }}"
+ switchport mode trunk
+ switchport trunk allowed vlan none
+ {%- set vlanlist = vlans.split(',') %}
+ switchport trunk allowed vlan {% for vlan in vlanlist -%}
+{{ vlandict.get(vlan) }}
+{%- if not loop.last %}, {% endif %}
+{%- endfor %}
+ switchport nonegotiate
+ switchport block unicast
+ switchport block multicast
+ snmp ifindex persist
+ no cdp enable
+ no vtp
+ no lldp transmit
+ no lldp receive
+ no shutdown
+{%- endmacro %}
+
+{% macro trunktiny(port, description, vlans, vlandict, portdict) -%}
+interface {{ portdict.get(port) }}
+ description "{{ description }}"
+ switchport mode trunk
+ switchport trunk allowed vlan none
+ {%- set vlanlist = vlans.split(',') %}
+ switchport trunk allowed vlan {% for vlan in vlanlist -%}
+{{ vlandict.get(vlan) }}
+{%- if not loop.last %},{% endif %}
+{%- endfor %}
+ no vtp
+ no cdp enable
+ switchport nonegotiate
+ no lldp transmit
+ no lldp receive
+ spanning-tree bpdufilter enable
+ spanning-tree bpduguard enable
+{%- endmacro %}
+
+{% macro shutdown(port, description, vlan, vlandict, portdict) -%}
+interface {{ portdict.get(port) }}
+ description {{description}}
+ switchport access vlan {{ vlandict.get(vlan) }}
+ switchport mode access
+ switchport nonegotiate
+ switchport protected
+ switchport block multicast
+ snmp ifindex persist
+ no cdp enable
+ no vtp
+ no lldp transmit
+ no lldp receive
+ spanning-tree portfast
+ spanning-tree bpdufilter enable
+ spanning-tree bpduguard enable
+ shutdown
+{%- endmacro %}

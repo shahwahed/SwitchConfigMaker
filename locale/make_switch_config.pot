@@ -1,0 +1,38 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: make_switch_config\n"
+"POT-Creation-Date: 2019-01-16 23:03+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 2.0.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: make_switch_config.py:27
+msgid "Liste des configuration de switch disponible :"
+msgstr ""
+
+#: make_switch_config.py:30
+msgid " Ctrl + D pour quitter"
+msgstr ""
+
+#: make_switch_config.py:34
+msgid "ce n'est pas un chiffre"
+msgstr ""
+
+#: make_switch_config.py:36
+msgid "Valeur non disponble"
+msgstr ""
+
+#: make_switch_config.py:138
+msgid "fichier de configuration généré %s"
+msgstr ""

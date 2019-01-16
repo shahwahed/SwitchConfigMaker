@@ -1,0 +1,30 @@
+
+no ip source-route
+ip arp proxy disable
+ip dhcp bootp ignore
+!
+!
+no ip domain-lookup
+no ip igmp snooping
+ip tcp synwait-time 10
+
+ip ssh version 2
+ip ssh dh min size 2048
+ip scp server enable
+ip ssh time-out 90
+ip ssh authentication-retries 2
+ip ssh logging events
+
+no ip http server
+no ip http secure-server
+
+no cdp run
+no cdp advertise-v2
+no cdp enable
+no service dhcp
+
+memory reserve critical 1000
+memory free low-watermark processor 20000
+memory free low-watermark IO 2000
+
+no macro auto monitor

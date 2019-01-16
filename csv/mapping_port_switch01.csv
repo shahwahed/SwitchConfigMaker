@@ -1,0 +1,8 @@
+name,description,profile,vlans
+GigabitEthernet1/0/1,Admin SERVER Prod hostname01 - port1,access,ADM_SERVER_PROD
+GigabitEthernet1/0/2,OOB Prod hostname01 - port2,access,OOB_PROD
+GigabitEthernet1/0/3,Admin SERVER Prod hostname02 - port1,access,ADM_SERVER_PROD
+GigabitEthernet1/0/4,OOB Prod hostname02- port2,access,OOB_PROD
+GigabitEthernet1/0/5,Admin SERVER Prod hostname03 - port1,access,ADM_SERVER_PROD
+GigabitEthernet1/0/6,OOB Prod hostname03 - port2,access,OOB_PROD
+

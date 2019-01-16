@@ -1,0 +1,26 @@
+!admin access console and vtty
+line con 0
+ exec-timeout 9 0
+ privilege level 15
+ authorization commands 1 CONSOLE
+ authorization commands 15 CONSOLE
+ authorization exec CONSOLE
+ logging synchronous
+ login authentication CONSOLE
+line vty 0 4
+ exec-timeout 5 0
+ transport input none
+ transport input ssh
+ transport output none
+line vty 5 15
+ exec-timeout 0 1
+ privilege level 0
+ no exec
+ transport input none
+ transport output none
+!
+ntp logging
+login on-failure log
+login on-success log
+login block-for 300 attempts 3 within 120
+login delay 2

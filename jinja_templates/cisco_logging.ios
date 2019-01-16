@@ -1,0 +1,23 @@
+!Logging configuration
+logging file flash:syslog 1000000 notifications
+logging count
+logging buffered 32000
+logging rate-limit console 2 except warnings
+logging console informational
+logging monitor informational
+logging origin-id hostname
+logging facility syslog
+
+archive
+ log config
+  logging enable
+  notify syslog contenttype plaintext
+  hidekeys
+ path flash:archive/automatic-backup-
+ maximum 14
+ write-memory
+
+ntp logging
+
+clock timezone CEST 1 0
+clock summer-time CEST recurring last Sun Mar 2:00 last Sun Oct 3:00

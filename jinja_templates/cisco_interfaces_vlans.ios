@@ -1,0 +1,73 @@
+errdisable recovery cause psecure-violation
+errdisable recovery cause bpduguard
+errdisable recovery interval 300
+!errdisable detect cause small-frame
+!errdisable recovery cause small-frame
+!vtp mode transparent
+vtp mode off
+
+
+spanning-tree mode rapid-pvst
+spanning-tree portfast default
+spanning-tree portfast bpduguard default
+spanning-tree portfast bpdufilter default
+spanning-tree extend system-id
+
+!VLAN Definition
+
+{% for vlan in vlans -%}
+! "{{ vlan['description'] }}"
+vlan {{ vlan['id'] }}
+ name {{ vlan['name'] }}
+{% if vlan['name'] == 'QUARANTAINE' %} shutdown
+{% endif %}
+{% endfor %}
+
+!Interface Definition
+
+! disable default native vlan 1
+interface vlan 1
+ no ip address
+ shutdown
+
+{% if configjson['interfacevlan'] -%}
+{%- for interface in configjson['interfacevlan'] %}
+interface vlan {{ vlandict.get(interface['name']) }}
+ description {{ interface['description'] }} on vlan {{ interface['name'] }}
+ ip address {{ interface['ip'] }}
+ no shutdown    
+{% endfor %}
+{% endif %}
+
+{% if mgntflag -%}
+!interface mgnt config
+{%- for interface in configjson['interfacemgnt'] %}
+interface {{ mgntport }}
+ description {{ interface['description'] }}
+{%- if configjson["mgntportuse"] == true %}
+ ip address {{ interface['ip'] }}
+ no shutdown    
+{% else %}
+ no ip address 
+ shutdown
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% for interface in configjson['interfacephy'] %}
+{% if interface.profile == 'access' -%}
+{{ ct.access(interface.port, interface.description, interface.vlans, vlandict, portdict) }}
+{% elif interface.profile == 'trunk' -%}
+{{ ct.trunk(interface.port, interface.description, interface.vlans, vlandict, portdict) }}
+{% else  -%}
+{{ ct.shutdown(interface.port, interface.description, 'QUARANTAINE', vlandict, portdict) }}
+{% endif %}
+{% endfor %}
+
+!port shutdown because not in use
+
+{% for interface in emptyportdict|sort %}
+{{ ct.shutdown(interface|string, 'port shutdown not in use', 'QUARANTAINE', vlandict, portdict) }}
+{% endfor %}
+
+

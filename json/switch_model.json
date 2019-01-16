@@ -1,0 +1,100 @@
+{
+    "WS-C2960S-48TD-L":
+            {
+                "name": "WS-C2960S-48TD-L", 
+                "access_port": {
+                    "0":{
+                        "name": "GigabitEthernet1/0/",
+                        "start": 1,
+                        "end": 48
+                    }
+
+                },
+                "management_port": {
+                    "embedded": true,
+                    "name": "Fastethernet0"
+                }
+            },
+            "WS-C2960X-48-FPS-L":
+            {
+                "name": "WS-C2960X-48-FPS-L", 
+                "access_port": {
+                    "0":{
+                        "name": "GigabitEthernet1/0/",
+                        "start": 1,
+                        "end": 48
+                    }
+
+                },
+                "management_port": {
+                    "embedded": true,
+                    "name": "Fastethernet0"
+                }
+            },
+            "WS-C2960X-48-FPD-L":
+            {
+                "name": "WS-C2960X-48-FPD-L", 
+                "access_port": {
+                    "0":{
+                        "name": "GigabitEthernet1/0/",
+                        "start": 1,
+                        "end": 48
+                    }
+
+                },
+                "management_port": {
+                    "embedded": true,
+                    "name": "Fastethernet0"
+                }
+            },
+    "WS-C2960CG-8TC-L":
+            {
+                "name": "WS-C2960CG-8TC-L", 
+                "access_port": {
+                    "0":{
+                        "name": "GigabitEthernet0/",
+                        "start": 1,
+                        "end": 10
+                    }
+                },
+                "management_port": {
+                    "embedded": false,
+                    "name":"Fastethernet0"
+                }
+            },
+    "N3K-C3048TP-1GE":
+            {
+                "name": "N3K-C3048TP-1GE", 
+                "access_port": {
+                    "1":{
+                        "name": "Ethernet1/",
+                        "start": 1,
+                        "end": 48
+                    }
+                },
+                "management_port": {
+                    "embedded": false,
+                    "name":"Fastethernet0"
+                }
+            },
+
+    "SWITCH_MULTI_SLOT":
+        {
+            "name": "SWITCH_MULTI_SLOT", 
+            "access_port": {
+                "0":{
+                    "name": "GigabitEthernet1/0/",
+                    "start": 1,
+                    "end": 48
+                },
+                "1":{
+                    "name": "GigabitEthernet1/1/",
+                    "start": 49,
+                    "end": 96
+                }
+            },
+            "management_port": {
+                    "name": "Fastethernet0"
+                }
+        }
+    }

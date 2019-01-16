@@ -1,0 +1,37 @@
+{% import 'cisco_macros.j2' as ct -%}
+!
+version 15.0
+
+no service pad
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime localtime
+service timestamps log datetime localtime
+service password-encryption
+!
+hostname {{hostname}}
+!
+boot-start-marker
+boot-end-marker
+
+{% include 'cisco_logging.ios' %}
+
+{% include 'cisco_user.ios' %}
+
+{% include 'cisco_tacas.ios' %}
+
+{% include 'cisco_ip_settings_and_div.ios' %}
+
+switch 1 provision {{ configjson['model']|lower }}
+
+
+{% include 'cisco_interfaces_vlans.ios' %}
+
+vstack
+
+{% include 'cisco_banner.ios' %}
+
+{% include 'cisco_admin_access.ios' %}
+
+
+end
