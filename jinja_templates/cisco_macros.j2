@@ -1,3 +1,5 @@
+{% set macro_list = ("access", "accesstiny", "trunk", "trunktiny", "shutdown") %}
+
 {% macro access(port, description, vlan, vlandict, portdict) -%}
 interface {{ portdict.get(port) }}
  description "{{ description }}"

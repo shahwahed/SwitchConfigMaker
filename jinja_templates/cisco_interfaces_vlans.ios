@@ -55,10 +55,8 @@ interface {{ mgntport }}
 {% endif %}
 
 {% for interface in configjson['interfacephy'] %}
-{% if interface.profile == 'access' -%}
-{{ ct.access(interface.port, interface.description, interface.vlans, vlandict, portdict) }}
-{% elif interface.profile == 'trunk' -%}
-{{ ct.trunk(interface.port, interface.description, interface.vlans, vlandict, portdict) }}
+{% if interface.profile in ct.macro_list %}
+{{ ct[interface.profile](interface.port, interface.description, interface.vlans, vlandict, portdict) }}
 {% else  -%}
 {{ ct.shutdown(interface.port, interface.description, 'QUARANTAINE', vlandict, portdict) }}
 {% endif %}
