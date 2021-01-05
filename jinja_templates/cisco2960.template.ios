@@ -1,4 +1,3 @@
-{% import 'cisco_macros.j2' as ct -%}
 !
 version 15.0
 

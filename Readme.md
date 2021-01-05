@@ -20,6 +20,7 @@
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
   <ol>
+    <li><a href="#Disclaimer">Disclaimer</a></li>
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
@@ -43,14 +44,17 @@
   </ol>
 </details>
 
+<!-- Disclaimer -->
+## Disclaimer
+Be mindful that some of these software might contain bugs or be harmful.
+Use these scripts at your own risk.
 
+DO NOT USE THIS SCRIPT FOR PRODUCTION USE! if you want to use it on production, review each template to fit with your need and review security configuration, test configuration.
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project was just a simple script to create IOS and NXOS configuration using jinja2 template and json file. You can do other switchs using your own jinja2 template.
-`github_username`, `repo_name`, `twitter_handle`, `email`, `project_title`, `project_description`
-
+This project was just a simple script to create IOS and NXOS configuration using jinja2 template and json file for lab environment. You can do other switchs using your own jinja2 template.
 
 ### Built With
 
@@ -88,10 +92,11 @@ Just run the script after configure vlan and switch configuration file.
 <!-- Configuration EXAMPLES -->
 ## Configuration
 
-You need to edit two files to get your switch config :
+You need to edit three files to get your switch config :
 
 * [json/vlan.json] : vlan configuration
 * [json/switch_port_config.json] switch configuration
+* [jinja_templates/*] any template your use to change password and ssh key
 
 
 * vlan.json file :
@@ -240,14 +245,15 @@ mgntportuse: true or false (to configure management port on cisco)
 				"vlans": "ADM01, ADM02"with 
 			},
 
-port profile could be trunk or access, your could define your custom profile according to your needs in cisco_macros.j2 (for cisco switch)
-
+port profile could be trunk or access, your could define your custom profile according to your needs in cisco_macros.j2 (for Cisco IOS switch and ciscoNX_macros.j2 for Cisco NXOS switch)
 <!-- ROADMAP -->
 ## Roadmap
 
 See the [open issues](https://github.com/shahwahed/SwitchConfigMaker/issues) for a list of proposed features (and known issues).
 
-add portgroup/portchannel support (debug in progress)
+* add json file or hashicorp vault support to store password and ssh key
+
+* cleanup template file
 
 <!-- CONTRIBUTING -->
 ## Contributing

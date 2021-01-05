@@ -1,3 +1,5 @@
+{% import 'cisco_macros.j2' as ct -%}
+
 errdisable recovery cause psecure-violation
 errdisable recovery cause bpduguard
 errdisable recovery interval 300
@@ -22,6 +24,7 @@ vlan {{ vlan['id'] }}
 {% if vlan['name'] == 'QUARANTAINE' %} shutdown
 {% endif %}
 {% endfor %}
+
 
 !Interface Definition
 
@@ -54,13 +57,19 @@ interface {{ mgntport }}
 {% endfor %}
 {% endif %}
 
+!port in use
+
 {% for interface in configjson['interfacephy'] %}
-{% if interface.profile in ct.macro_list %}
-{{ ct[interface.profile](interface.port, interface.description, interface.vlans, vlandict, portdict) }}
+{% if interface.profile in ct.macro_list -%}
+{% if interface.portchannel is defined -%}
+{{ ct[interface.profile](interface.port, interface.description, interface.vlans, vlandict, portdict, interface.portchannel) }}
 {% else  -%}
-{{ ct.shutdown(interface.port, interface.description, 'QUARANTAINE', vlandict, portdict) }}
+{{ ct[interface.profile](interface.port, interface.description, interface.vlans, vlandict, portdict) }}
 {% endif %}
-{% endfor %}
+{%- else  -%}
+{{ ct.shutdown(interface.port, interface.description, 'QUARANTAINE', vlandict, portdict) }}
+{%- endif -%}
+{%- endfor %}
 
 !port shutdown because not in use
 

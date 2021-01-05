@@ -105,7 +105,7 @@ for switch in configjson:
 switchname = main_menu(sorted(switchNameList))
 
 #check du folder puis creation du fichier de conf de sortie
-check_folder(script_dir + "/output/")
+ensure_folder(script_dir + "/output/")
 configOutPutFile = script_dir + "/output/" + switchname + ".ios"
 
 ##initialisation des variables pour cree le fichier de config
