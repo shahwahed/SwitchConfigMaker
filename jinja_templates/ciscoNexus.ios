@@ -1,0 +1,68 @@
+hostname {{hostname}}
+vdc {{hostname}} id 1
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource vrf minimum 2 maximum 4096
+  limit-resource port-channel minimum 0 maximum 104
+  limit-resource u4route-mem minimum 128 maximum 128
+  limit-resource u6route-mem minimum 96 maximum 96
+  limit-resource m4route-mem minimum 58 maximum 58
+  limit-resource m6route-mem minimum 8 maximum 8
+
+feature scp-server
+feature tacacs+
+cfs eth distribute
+feature scheduler
+feature interface-vlan
+feature lacp
+feature vpc
+
+no password strength-check
+username admin password 5 <yourpass>  role network-admin
+username admin role priv-15
+username admin-DAT password 5 <yourpass>  role priv-15
+username admin-DAT sshkey ssh-rsa <your rsa key>
+
+{% include 'cisco_bannerNX.ios' %}
+
+
+control-plane
+
+no ip igmp snooping
+
+{% include 'ciscoNX_interfaces_vlans.ios' %}
+
+errdisable recovery cause psecure-violation
+errdisable recovery cause bpduguard
+errdisable recovery interval 300
+!errdisable detect cause small-frame
+!errdisable recovery cause small-frame
+!vtp mode transparent
+vtp mode off
+
+
+spanning-tree mode rapid-pvst
+spanning-tree portfast default
+spanning-tree portfast bpduguard default
+spanning-tree portfast bpdufilter default
+spanning-tree extend system-id
+
+no cdp enable
+spanning-tree port type edge default
+spanning-tree port type edge bpduguard default
+spanning-tree port type edge bpdufilter default
+vrf context management
+no system urpf disable
+no port-channel load-balance resilient
+
+scheduler job name backupconfig
+configure terminal
+ copy startup-config bootflash:/startup-config 
+ copy running-config bootflash:/running-config 
+ 
+end-job
+
+scheduler schedule name hourlybackupjob
+  job name backupconfig
+  time start 2020:10:11:12:00 repeat 0:0:60
+
+
