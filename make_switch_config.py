@@ -1,64 +1,77 @@
 #!/bin/python3
 # -*- coding: utf-8 -*-
-#Copyright (c) 2019 WAHED Shah Mohsin
-#This code is under MIT licence, you can find the complete file here: https://github.com/shahwahed/SwitchConfigMaker/blob/master/LICENSE
 
 import yaml
 import json
 import sys
 import os
+import pathlib
 from jinja2 import Environment, FileSystemLoader
 from pprint import pprint
-#from gettext import gettext as _
-import gettext
-import locale
 
-current_locale, encoding = locale.getdefaultlocale()
-print(current_locale)
 
-locale_path = 'locale/'
-language = gettext.translation('make_switch_config', locale_path, [current_locale], fallback=True )
-language.install()
+def ensure_folder(folderTest):
+    """[Check if folder exist and create it]
+
+    Args:
+        folderTest (string): [folder to test existance]
+    """    
+    file = pathlib.Path(folderTest)
+    if not file.exists ():
+        print ("File "+ folderTest +" not exist, creating it")
+        pathlib.Path(folderTest).mkdir(parents=True, exist_ok=True) 
+
+def main_menu(menuItem):
+    """Menu principale
+
+    Args:
+        menuItem ([list]): [liste les configuration de switch disponible dans votre fichier json]
+
+    Returns:
+        Affiche juste un menu avec la liste des configuration connu
+    """    
+    os.system('clear')
+    while True:
+        try :
+            print('Liste des configurations de switch disponible :')
+            for menuValue in menuItem:
+                print(str(menuItem.index(menuValue)) + " - " + menuValue)
+            print(" Ctrl + D pour quitter")
+            choice = int(input("  >>  "))
+            return menuItem[int(choice)]
+        except ValueError:
+                print("ce n'est pas un chiffre")
+        except IndexError:
+                print("Valeur non disponble")
 
 #script variable
 #TODO : input variable?
 #template_file = 'cisco2960-cg.template.ios'
-template_file = 'cisco2960.template.ios'
+#template_file = 'cisco2960s.template.nopass.ios'
+
+# Variables statiques
+
+
 
 jinja_dir = 'jinja_templates'
-vlan_json_file = 'json/vlan_example.json'
-switch_description_json_file = 'json/switch_port_config_example.json'
+vlan_json_file = 'json/vlan.json'
+switch_description_json_file = 'json/switch_port_config.json'
 switch_model_definition_file = 'json/switch_model.json'
-
-def main_menu(menuItem):
-    os.system('clear')
-    while True:
-        try :
-            print(_('Liste des configuration de switch disponible :'))
-            for menuValue in menuItem:
-                print(str(menuItem.index(menuValue)) + " - " + menuValue)
-            print(_(" Ctrl + D pour quitter"))
-            choice = int(input("  >>  "))
-            return menuItem[int(choice)]
-        except ValueError:
-                print(_("ce n'est pas un chiffre"))
-        except IndexError:
-                print(_("Valeur non disponble"))
-
 
 #script path
 script_dir = os.path.dirname(os.path.realpath(__file__))
-
 #jinja template dir
 jinja_template_dir = os.path.join(script_dir,jinja_dir)
 
 # vlan json
 # todo : make this variable may be?
 vlanfile = os.path.join(script_dir,vlan_json_file)
+#vlanfile = os.path.join(script_dir,'json/huawei.vlan.json')
 
 # switch configuration json file
 # todo : make this variable may be?
 switchjsonfile = os.path.join(script_dir,switch_description_json_file)
+#switchjsonfile = os.path.join(script_dir,'json/huawei.interfaces.json')
 
 # switch model json file
 # todo : make this variable may be?
@@ -68,49 +81,62 @@ switchmodeljsonfile = os.path.join(script_dir,switch_model_definition_file)
 #create Jinja2 environment object and refer to templates directory
 env = Environment(loader=FileSystemLoader(jinja_template_dir))
 
-# jinja template
-# todo : may be retrive this from switch config file
-#create Jinja2 template object based off of template named 'switch_ios'
-template = env.get_template(template_file)
-
-#portDict dictionary containing portname based on switchs models
+#portDict dictionaire qui contient le nommages des ports du switchs en fonction du modèle
 portDict = {}
 switchNameList = []
 
-#json file loading
+##changement des fichiers json
 
-#vlanconfig => containing vlan definition, to keep every switch consitent
+#fichier de la config des vlan
 vlanconfig = json.loads(open(vlanfile).read())
 
-#json file for switch models definition
+#fichier db des switchs
 switchmodeldb = json.loads(open(switchmodeljsonfile).read())
 
-#json file configuration of the switch, take from command line
+#fichier de la config des switch
 configjson = json.loads(open(switchjsonfile).read())
 
-#json file loading end
+#fin changement des fichiers json
 
+#creation du menu deroulant pour la liste des switchs
 for switch in configjson:
     switchNameList.append(switch)
 
 switchname = main_menu(sorted(switchNameList))
 
+#check du folder puis creation du fichier de conf de sortie
+check_folder(script_dir + "/output/")
 configOutPutFile = script_dir + "/output/" + switchname + ".ios"
 
+##initialisation des variables pour cree le fichier de config
+
+#template pour crée le fichier de conf
+template_file = configjson[switchname]['template']
+template = env.get_template(template_file)
+
+#hostname du switch
 hostname = configjson[switchname]['hostname']
+
+#domaine vlan utiliser par le switch
 vlan_domain = configjson[switchname]['vlan_domain']
+
+#vlans du domaine
 vlans = vlanconfig[vlan_domain]['vlans']
+
+#mgnt = configjson[switchname]["interfacemgnt"]
+#dictionnaire des vlans
 vlandict = { vlan["name"]: vlan["id"] for vlan in vlans}
 
-#creation of a dict of port using by your config
+#création du dictionnaire de description des ports qui compose le switchs
 modulePortconfig = switchmodeldb.get(configjson[switchname]['model']).get('access_port')
 for modPort in modulePortconfig.keys():
     portStart = modulePortconfig[modPort]['start']
     portEnd = modulePortconfig[modPort]['end']
     portName = modulePortconfig[modPort]['name']
-
     for portID in range(portStart, portEnd +1):
         portDict[str(portID)] = portName + str(portID)
+
+#config du port de management
 if switchmodeldb.get(configjson[switchname]['model']).get('management_port').get('embedded'):
     mgntFlag = True
     mgntPort = switchmodeldb.get(configjson[switchname]['model']).get('management_port').get('name')
@@ -118,22 +144,22 @@ else:
     mgntFlag = False
     mgntPort = 'None'
 
-# we create emptyPortDict variable, to shutdown everyport you're not using
+# on crée la variable emptyPortDict qui va contenir les ports non configurés sur le switch pour les passer a shutdown
 emptyPortDict = { emptyPort['port']: "null" for emptyPort in configjson[switchname].get('interfacephy') }
 emptyPortDict = portDict.keys() - emptyPortDict.keys()
-# uggly hack to sort correctly the dictonary, cause 10 goes before 1 in string sort, so we send jinja2 int, sorted correctly
-# then in jinja2 convert them to string to join them properly with correct name
+#hack sordide pour que les ports soit dans le bon ordre 10 avant 1, on les converti en int pour les envoyer a jinja2, pour etre dans le bon
+# ordre, puis dans le template jinja2 cast en string
 emptyPortDict = {int(x) for x in emptyPortDict}
 emptyPortDict = sorted(emptyPortDict)
-
+#emptyPortDict = {}
 
 #uncomment next line for debug
 #pprint(ma_var)
 #sys.exit()
 
-# json variable send to jinja template
+#on crée un json qui décrit les variables envoyés à Jinja
 
-ciscoConfigTemplateVariable =   {"vlans": vlans,
+switchConfigTemplateVariable =   {"vlans": vlans,
                                 "hostname": hostname,
                                 "configjson": configjson[switchname],
                                 "vlandict": vlandict,
@@ -143,10 +169,7 @@ ciscoConfigTemplateVariable =   {"vlans": vlans,
                                 "mgntport": mgntPort
                                 }
 
-ciscoConfigGenerate = template.render(ciscoConfigTemplateVariable)
-print(ciscoConfigGenerate, file=open(configOutPutFile,"w"))
-print(_("fichier de configuration généré %s") % (configOutPutFile))
-
-
-
+switchConfigGenerate = template.render(switchConfigTemplateVariable)
+print(switchConfigGenerate, file=open(configOutPutFile,"w"))
+print("fichier de configuration généré "+configOutPutFile)
 
