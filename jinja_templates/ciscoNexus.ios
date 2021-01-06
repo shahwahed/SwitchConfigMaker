@@ -17,10 +17,8 @@ feature lacp
 feature vpc
 
 no password strength-check
-username admin password 5 <yourpass>  role network-admin
-username admin role priv-15
-username admin-DAT password 5 <yourpass>  role priv-15
-username admin-DAT sshkey ssh-rsa <your rsa key>
+username admin password 5 <yourpass>  role priv-15
+username admin sshkey ssh-rsa <your rsa key>
 
 {% include 'cisco_bannerNX.ios' %}
 
