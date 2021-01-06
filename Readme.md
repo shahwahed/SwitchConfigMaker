@@ -160,9 +160,10 @@ You need to edit three files to get your switch config :
     }
 }
 ```
-Vlan definition is simple, a domain to separate, admin, prod, preprod
-a name (useful for cisco config), a description to remember the need of the vlan and an ID.
-
+Vlan definition is simple :
+  * a domain to separate : admin, prod, preprod
+  * a name (mandatory for cisco config)
+  * a description to remember the need of the vlan and an ID.
 
 * switch_port_config.json file:
 ```
@@ -172,6 +173,7 @@ a name (useful for cisco config), a description to remember the need of the vlan
 		"vlan_domain": "admin",
 		"mgntportuse": true,
 		"model": "WS-C2960S-48TD-L",
+		"template": "cisco2960.template.ios",
 		"interfacemgnt": [
 			{
 			"port": "Fastethernet0",
@@ -199,7 +201,8 @@ a name (useful for cisco config), a description to remember the need of the vlan
 		"hostname": "switch02",
 		"vlan_domain": "prod",
 		"mgntportuse": true,
-		"model": "WS-C2960X-48-FPS-L",
+		"model": "N3K-C3048TP-1GE",
+		"template": "ciscoNexus.ios"
 		"interfacemgnt": [
 			{
 			"port": "Fastethernet0",

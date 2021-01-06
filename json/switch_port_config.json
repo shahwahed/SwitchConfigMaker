@@ -4,6 +4,7 @@
 		"vlan_domain": "admin",
 		"mgntportuse": true,
 		"model": "WS-C2960S-48TD-L",
+		"template":"cisco2960.template.ios",
 		"interfacemgnt": [
 			{
 			"port": "Fastethernet0",
@@ -31,7 +32,8 @@
 		"hostname": "switch02",
 		"vlan_domain": "prod",
 		"mgntportuse": true,
-		"model": "WS-C2960X-48-FPS-L",
+		"model": "N3K-C3048TP-1GE",
+		"template":"ciscoNexus.ios",
 		"interfacemgnt": [
 			{
 			"port": "Fastethernet0",
