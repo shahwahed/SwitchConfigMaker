@@ -21,7 +21,7 @@ spanning-tree extend system-id
 ! "{{ vlan['description'] }}"
 vlan {{ vlan['id'] }}
  name {{ vlan['name'] }}
-{% if vlan['name'] == 'QUARANTAINE' %} shutdown
+{% if vlan['name'] == 'QUARANTINE' %} shutdown
 {% endif %}
 {% endfor %}
 
@@ -67,14 +67,14 @@ interface {{ mgntport }}
 {{ ct[interface.profile](interface.port, interface.description, interface.vlans, vlandict, portdict) }}
 {% endif %}
 {%- else  -%}
-{{ ct.shutdown(interface.port, interface.description, 'QUARANTAINE', vlandict, portdict) }}
+{{ ct.shutdown(interface.port, interface.description, 'QUARANTINE', vlandict, portdict) }}
 {%- endif -%}
 {%- endfor %}
 
 !port shutdown because not in use
 
 {% for interface in emptyportdict|sort %}
-{{ ct.shutdown(interface|string, 'port shutdown not in use', 'QUARANTAINE', vlandict, portdict) }}
+{{ ct.shutdown(interface|string, 'port shutdown not in use', 'QUARANTINE', vlandict, portdict) }}
 {% endfor %}
 
 

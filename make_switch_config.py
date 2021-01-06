@@ -22,32 +22,27 @@ def ensure_folder(folderTest):
         pathlib.Path(folderTest).mkdir(parents=True, exist_ok=True) 
 
 def main_menu(menuItem):
-    """Menu principale
+    """Main menu
 
     Args:
-        menuItem ([list]): [liste les configuration de switch disponible dans votre fichier json]
+        menuItem ([list]): [Switch available in your json file]
 
     Returns:
-        Affiche juste un menu avec la liste des configuration connu
+        Just display list of switch
     """    
     os.system('clear')
     while True:
         try :
-            print('Liste des configurations de switch disponible :')
+            print('List of switch configuration available in your json file :')
             for menuValue in menuItem:
                 print(str(menuItem.index(menuValue)) + " - " + menuValue)
-            print(" Ctrl + D pour quitter")
+            print(" Ctrl + D to quit")
             choice = int(input("  >>  "))
             return menuItem[int(choice)]
         except ValueError:
-                print("ce n'est pas un chiffre")
+                print("Value is not a number")
         except IndexError:
-                print("Valeur non disponble")
-
-#script variable
-#TODO : input variable?
-#template_file = 'cisco2960-cg.template.ios'
-#template_file = 'cisco2960s.template.nopass.ios'
+                print("Value not available")
 
 # Variables statiques
 
@@ -171,5 +166,5 @@ switchConfigTemplateVariable =   {"vlans": vlans,
 
 switchConfigGenerate = template.render(switchConfigTemplateVariable)
 print(switchConfigGenerate, file=open(configOutPutFile,"w"))
-print("fichier de configuration généré "+configOutPutFile)
+print("config file created in : "+configOutPutFile)
 
