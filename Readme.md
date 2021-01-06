@@ -97,7 +97,7 @@ You need to edit three files to get your switch config :
 * [json/vlan.json] : vlan configuration
 * [json/switch_port_config.json] switch configuration
 * [jinja_templates/*] any template your use to change password and ssh key
-
+* review template to modify option and configuration to your environment
 
 * vlan.json file :
 ```
@@ -240,30 +240,34 @@ a name (useful for cisco config), a description to remember the need of the vlan
 }
 ```
 to define a switch you have to define a switchname node with the following :
-hostname
-vlan_domain
-mgntportuse: true or false (to configure management port on cisco)
-		"model": "WS-C2960S-48TD-L" use to define port name and number based on switch model
-		"interfacemgnt": use for setup management interface could be phyical or vlan for cisco switch
+
+* hostname
+* vlan_domain
+* mgntportuse: true or false (to configure management port on cisco)
+* "model": model of your switch use to define port name and number based on switch mode (file switch_model.json )
+* "interfacemgnt": use for setup management interface could be phyical or vlan for cisco switch
+```
 			{
 			"port": "Fastethernet0",
 			"description": "administration ip",
 			"ip": "192.168.1.21 255.255.255.0"
 			}
-		],
-        "interfacephy" : to define all interface your use, not use will be shutdown
+```
+* "interfacephy" section to define all interface your use, not use will be shutdown by default
+```
 			{
 				"port": "1", 
 				"description": "Admin ESX01 - port1", 
 				"profile": "trunk", 
 				"vlans": "ADM01, ADM02"with 
-			},
+			}
+```
 
 port profile could be access, trunk, accesschannel, trunkchannel, shutdown, your could define your custom profile according to your needs in cisco_macros.j2 (for Cisco IOS switch and ciscoNX_macros.j2 for Cisco NXOS switch)
 
 By default, none configured ports will be put in shutdown profile
 
-*channel, is for configuring portchannel, you have to put sevreal port with the same portchannel number
+accesschannel and portchannel, is for configuring portchannel, you have to put sevreal port with the same portchannel number
 
 <!-- ROADMAP -->
 ## Roadmap
