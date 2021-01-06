@@ -1,8 +1,8 @@
-{% set macro_list = ("access", "accesstiny", "trunk", "trunktiny", "shutdown") %}
+{%set macro_list = ("access", "trunk", "trunkchannel") %}
 
 {% macro access(port, description, vlan, vlandict, portdict) -%}
 interface {{ portdict.get(port) }}
- description "{{ description }}"
+ description {{ description }}
  switchport access vlan {{ vlandict.get(vlan) }}
  switchport mode access
  switchport nonegotiate
@@ -23,23 +23,29 @@ interface {{ portdict.get(port) }}
  no shutdown
 {%- endmacro %}
 
-{% macro accesstiny(port, description, vlan, vlandict, portdict) -%}
+{% macro accessLITE(port, description, vlan, vlandict, portdict) -%}
 interface {{ portdict.get(port) }}
- no vtp
- no cdp enable
+ description {{ description }}
  switchport mode access
  switchport access vlan {{ vlandict.get(vlan) }}
  switchport nonegotiate
  switchport protected
- spanning-tree portfast
  switchport block unicast
  switchport block multicast
- 
+ snmp ifindex persist
+ no cdp enable
+ no vtp
+ no lldp transmit
+ no lldp receive
+ spanning-tree portfast
+ spanning-tree bpdufilter enable
+ spanning-tree bpduguard enable
+ no shutdown
 {%- endmacro %}
 
 {% macro trunk(port, description, vlans, vlandict, portdict) -%}
 interface {{ portdict.get(port) }}
- description "{{ description }}"
+ description {{ description }}
  switchport mode trunk
  switchport trunk allowed vlan none
  {%- set vlanlist = vlans.split(',') %}
@@ -58,23 +64,46 @@ interface {{ portdict.get(port) }}
  no shutdown
 {%- endmacro %}
 
-{% macro trunktiny(port, description, vlans, vlandict, portdict) -%}
+{% macro accesschannel(port, description, vlan, vlandict, portdict, portchannel) -%}
 interface {{ portdict.get(port) }}
- description "{{ description }}"
+ description {{ description }}
+ switchport mode access
+ switchport access vlan {{ vlandict.get(vlan) }}
+ switchport nonegotiate
+ switchport protected
+ switchport block unicast
+ switchport block multicast
+ snmp ifindex persist
+ no cdp enable
+ no vtp
+ no lldp transmit
+ no lldp receive
+ spanning-tree portfast
+ spanning-tree bpdufilter enable
+ spanning-tree bpduguard enable
+{% if portchannel %}
+ spanning-tree port type normal
+ channel-group {{portchannel}} mode active
+{%- endif %}
+ no shutdown
+{%- endmacro %}
+
+{% macro trunkchannel(port, description, vlans, vlandict, portdict, portchannel) -%}
+interface {{ portdict.get(port) }}
+ description {{ description }}
  switchport mode trunk
  switchport trunk allowed vlan none
  {%- set vlanlist = vlans.split(',') %}
  switchport trunk allowed vlan {% for vlan in vlanlist -%}
 {{ vlandict.get(vlan) }}
-{%- if not loop.last %},{% endif %}
-{%- endfor %}
- no vtp
+{%- if not loop.last %}, {% endif %}
+{%- endfor -%}
+{% if portchannel %}
+ spanning-tree port type normal
+ channel-group {{portchannel}} mode active
+{%- endif %}
  no cdp enable
- switchport nonegotiate
- no lldp transmit
- no lldp receive
- spanning-tree bpdufilter enable
- spanning-tree bpduguard enable
+ no shutdown
 {%- endmacro %}
 
 {% macro shutdown(port, description, vlan, vlandict, portdict) -%}
