@@ -1,0 +1,58 @@
+{
+	"admin": {
+		"vlans": [
+            {
+                "name": "NATIVE", 
+                "description": "Native", 
+                "id": "777"
+            },             {
+                "name": "QUARANTINE", 
+                "description": "Quarantine vlan", 
+                "id": "666"
+            },             {
+                "name": "WKS_ZA", 
+                "description": "Admin workstation", 
+                "id": "100"
+            }, 
+            {
+                "name": "ADM01", 
+                "description": "Administration vlan 01", 
+                "id": "101"
+            },
+            {
+                "name": "ADM02", 
+                "description": "Administration vlan 02", 
+                "id": "102"
+            },
+            {
+                "name": "OOB01", 
+                "description": "Out of Band vlan 01", 
+                "id": "103"
+            }
+        ]
+
+    },
+    "prod": {
+        "vlans": [
+            {
+                "name": "NATIVE", 
+                "description": "Native vlan", 
+                "id": "777"
+            },             {
+                "name": "QUARANTINE", 
+                "description": "Quarantine vlan", 
+                "id": "666"
+            },
+            {
+                "name": "PROD01", 
+                "description": "Production vlan 01", 
+                "id": "201"
+            }, 
+            {
+                "name": "STK01", 
+                "description": "Storage vlan 01", 
+                "id": "202"
+            }
+		]
+    }
+}

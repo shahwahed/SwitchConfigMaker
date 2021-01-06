@@ -1,0 +1,72 @@
+{
+	"switch01": {
+		"hostname": "switch01",
+		"vlan_domain": "admin",
+		"mgntportuse": true,
+		"model": "WS-C2960S-48TD-L",
+		"interfacemgnt": [
+			{
+			"port": "Fastethernet0",
+			"description": "administration ip",
+			"ip": "192.168.1.21 255.255.255.0"
+			}
+		],
+        "interfacephy": [
+			{
+				"port": "1", 
+				"description": "Admin ESX01 - port1", 
+				"profile": "trunk", 
+				"vlans": "ADM01, ADM02"
+			}, 
+			{
+				"port": "2", 
+				"description": "OOB ESX01 - idrac", 
+				"profile": "access", 
+				"vlans": "OOB01"
+			}
+		]
+
+	},
+	"switch02": {
+		"hostname": "switch02",
+		"vlan_domain": "prod",
+		"mgntportuse": true,
+		"model": "WS-C2960X-48-FPS-L",
+		"interfacemgnt": [
+			{
+			"port": "Fastethernet0",
+			"description": "interface IP d'administration",
+			"ip": "192.168.1.2 255.255.255.0"
+			}
+		],
+        "interfacephy": [
+			{
+				"port": "3",
+				"description": "ESX PROD 01 - port 2",
+				"profile": "trunk",
+				"vlans": "PROD01, STK01"
+			},
+			{
+				"port": "4",
+				"description": "ESX PROD 02 - port 2",
+				"profile": "trunk",
+				"vlans": "PROD01, STK01"
+			},
+      			{
+				"port": "5",
+				"description": "STK SRV 01 - port 2",
+				"profile": "trunkchannel",
+				"vlans": "PROD01, STK01",
+        "portchannel": "50"
+			},
+			{
+				"port": "6",
+				"description": "STK SRV 01 - port 3",
+				"profile": "trunkchannel",
+				"vlans": "PROD01, STK01",
+        "portchannel": "50"
+			}
+		]
+
+	}
+}

@@ -219,6 +219,20 @@ a name (useful for cisco config), a description to remember the need of the vlan
 				"description": "ESX PROD 02 - port 2",
 				"profile": "trunk",
 				"vlans": "PROD01, STK01"
+			},
+      			{
+				"port": "5",
+				"description": "STK SRV 01 - port 2",
+				"profile": "trunkchannel",
+				"vlans": "PROD01, STK01",
+        "portchannel": "50"
+			},
+			{
+				"port": "6",
+				"description": "STK SRV 01 - port 3",
+				"profile": "trunkchannel",
+				"vlans": "PROD01, STK01",
+        "portchannel": "50"
 			}
 		]
 
@@ -245,7 +259,12 @@ mgntportuse: true or false (to configure management port on cisco)
 				"vlans": "ADM01, ADM02"with 
 			},
 
-port profile could be trunk or access, your could define your custom profile according to your needs in cisco_macros.j2 (for Cisco IOS switch and ciscoNX_macros.j2 for Cisco NXOS switch)
+port profile could be access, trunk, accesschannel, trunkchannel, shutdown, your could define your custom profile according to your needs in cisco_macros.j2 (for Cisco IOS switch and ciscoNX_macros.j2 for Cisco NXOS switch)
+
+By default, none configured ports will be put in shutdown profile
+
+*channel, is for configuring portchannel, you have to put sevreal port with the same portchannel number
+
 <!-- ROADMAP -->
 ## Roadmap
 
